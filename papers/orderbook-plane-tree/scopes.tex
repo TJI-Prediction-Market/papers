@@ -1,0 +1,46 @@
+\section{Scope} \label{sec:scope}
+By \Cref{axiom:sub}, a market order crossing $N$ ticks is allowed only to access $o(N)$ of them. By the pigeonhole principle, $\Omega(N)$ of the ticks are untouched during a sweep, which leads to the following.
+\begin{definition}[Staleness] \label{def:stale}
+    A tick is stale if it has been crossed during a sweep and no limit order has been placed on it since then.
+\end{definition}
+The correctness of the order book requires that when placing a limit order on a tick, the staleness of that price tick be resolved. For this purpose, a sweep must maintain some \textbf{words} $w$ in memory.
+
+Limit order placement links an abstract word to price ticks.
+\begin{definition}[Scope] \label{def:scope}
+    For a word $w$, its scope $S(w)$ is defined as follows.
+    \begin{equation*}
+        S(w)\coloneqq\{t\in T\mid \text{a placement at }t \text{ accesses } w\}
+    \end{equation*}
+\end{definition}
+\begin{definition}[Partition] \label{def:partition}
+    A partition $\mathcal{P}$ of $[t]$ is a collection of pairwise disjoint scopes $\{S_i\}$ s.t. $\bigcup_{i}S_i=[t]$.
+\end{definition}
+\Cref{def:partition} is well-defined. See \Cref{app:partition} for the proof.
+\begin{definition} \label{def:straddle}
+    A scope $S$ straddles $t$ if 
+    \begin{equation*}
+        \min S\leq t<\max S.
+    \end{equation*}
+\end{definition}
+Now we define rigorously the cost we minimize.
+\begin{definition} \label{def:cost}
+    Let
+    \begin{equation*}
+        d(t)\coloneqq\min\{\lvert\mathcal{P}\rvert\mid\mathcal{P}\subseteq\mathcal{S}\text{ partitions }[t]\},
+    \end{equation*}
+    and
+    \begin{equation*}
+        \mathcal{C}_t\coloneqq\{S\in\mathcal{S}\mid S\text{ straddles }t\}.
+    \end{equation*}
+    The cost of a family $\mathcal{S}$ of scopes at $t$ is
+    \begin{equation*}
+        d(t)+\lvert\mathcal{C}_t\rvert.
+    \end{equation*}
+\end{definition}
+\begin{remark}
+    The intuition is: A sweep halting at $t$ pays two parts
+    \begin{enumerate}
+        \item Walking a partition, paying one word write per scope in the partition.
+        \item Updating the words whose scopes straddle $t$.
+    \end{enumerate}
+\end{remark}

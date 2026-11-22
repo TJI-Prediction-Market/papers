@@ -1,0 +1,26 @@
+\appendix
+\section{Well-definedness of the partition} \label{app:partition}
+\begin{lemma} \label{lem:partition}
+    \Cref{def:partition} is well-defined.
+\end{lemma}
+\begin{proof}
+    Let a market order cross $S_1,\dots,S_m$ and $w_1,\dots,w_m$ the words of these scopes. Let $t\coloneqq\max S_m$.
+
+    When the sweep writes $w_k$, it has crossed $\max S_{k-1}$, so all ticks in $[\max S_{k-1}]$ have been crossed. Suppose for contradiction that
+    \begin{equation*}
+        \min S_k\leq\max S_{k-1}.
+    \end{equation*}
+    Then $\min S_k$ would have been crossed and rendered stale. Because $w_k$ was not modified, the subsequent write of $w_k$ would imply a sweep over stale tick, contradicting the correctness of the order book. Hence
+    \begin{equation*}
+        \max S_{k-1}<\min S_k\leq\max S_k\leq t,
+    \end{equation*}
+    and in particular
+    \begin{equation*}
+        \bigcup_{i}S_i\subseteq[t].
+    \end{equation*}
+
+    Let $p\in[t]$. The tick $p$ is crossed. Suppose for contradiction that $p\notin S_i$ for all $1\leq i\leq m$. If a new limit order were to be placed at $p$, none of $w_1,\dots,w_m$ would be among the words this placement checked. The staleness at $p$ (\Cref{def:stale}) would then not be resolved, contradicting the correctness of the order book. Hence
+    \begin{equation*}
+        [t]\subseteq\bigcup_{i}S_i.
+    \end{equation*}
+\end{proof}

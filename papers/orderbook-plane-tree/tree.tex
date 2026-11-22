@@ -1,0 +1,42 @@
+\section{Forest of plane trees} \label{sec:tree}
+In this section, we organize the laminar system of \Cref{sec:laminarity} into a forest of plane trees \parencite{harary}.
+\begin{definition}[Plane tree] \label{def:plane}
+    A plane tree is a finite rooted tree together with a linear order on the children of each vertex.
+\end{definition}
+\begin{proposition} \label{proposition:forest}
+    For scopes $S,S'\in\mathcal{S}$, draw a directed arrow from $S$ to $S'$ if
+    \begin{enumerate}
+        \item $S\subsetneq S'$,
+        \item $\nexists T\in\mathcal{S}$ s.t. $S\subsetneq T\subsetneq S'$.
+    \end{enumerate}
+    Then $\mathcal{S}$ becomes a forest with each root a maximal scope.
+\end{proposition}
+\begin{proof}
+    Since a directed arrow points to a strictly larger scope, arrows do not form a cycle. Therefore $\mathcal{S}$ is a Directed Acyclic Graph (DAG).
+
+    Suppose for contradiction that the DAG were not a forest. Then some scope $S$ would have two outgoing arrows $S\to S_1$ and $S\to S_2$ with $S_1\neq S_2$. Since $S_1\cap S_2\supseteq S\neq\emptyset$, by \Cref{thm:forest}, $S_1$ and $S_2$ would be nested, and the smaller would lie strictly between $S$ and the larger, contradicting rule $2$. A non-maximal scope has an arrow to a minimal proper superset, so the roots are exactly the maximal scopes.
+\end{proof}
+It remains to establish a linear order.
+\begin{definition}[Linear order] \label{def:linear-order}
+    Let $S_1\neq S_2$ be children of $S$. The linear order $<$ on $\mathcal{S}$ is defined as follows.
+    \begin{equation*}
+        S_1<S_2
+    \end{equation*}
+    if $\max S_1<\min S_2$.
+\end{definition}
+\begin{proposition}
+    \Cref{def:linear-order} is well-defined.
+\end{proposition}
+\begin{proof}
+    Suppose for contradiction that $S_1$ and $S_2$ were nested, WLOG $S_1\subsetneq S_2$. Then $S_1\subsetneq S_2\subsetneq S$, contradicting rule $2$ in \Cref{proposition:forest}. Hence $S_1\cap S_2=\emptyset$ by \Cref{thm:forest}. Being disjoint intervals, exactly one of
+    \begin{equation*}
+        S_1<S_2,\qquad S_2<S_1
+    \end{equation*}
+    holds. Hence comparability holds for $<$.
+
+    For transitivity, suppose $S_1<S_2$ and $S_2<S_3$. Then,
+    \begin{equation*}
+        \max S_1<\min S_2\leq\max S_2<\min S_3,
+    \end{equation*}
+    hence $S_1<S_3$. Therefore, $<$ is linear.
+\end{proof}

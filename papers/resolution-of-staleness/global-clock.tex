@@ -1,0 +1,79 @@
+\section{The global clock} \label{sec:global-clock}
+In this section, we define global clock and the dynamics of local and global clocks. We provide an algorithm to resolve staleness using $N+1$ storage, which is optimal by \Cref{proposition:local} and \Cref{thm:insufficient}.
+\begin{definition}[Global clock] \label{def:clock}
+    The book maintains a global clock $c\in\mathbb{N}$, initially $0$, with a single method
+    \begin{equation*}
+        \mathit{bump}()\colon C\gets C+1.
+    \end{equation*}
+\end{definition}
+Then we give the dynamics of local and global clockes \Cref{alg:sweep,alg:place}.
+\begin{algorithm}[htbp!]
+\caption{Sweep on side $\sigma$}\label{alg:sweep}
+\begin{algorithmic}[1]
+\State $\mathit{bump}()$
+\For{each word $w$ written during the sweep}
+    \State $c_{t_w}\gets C$ \label{ln:bump}
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[htbp!]
+\caption{Placement at tick $t$ on side $\sigma$}\label{alg:place}
+    \begin{algorithmic}[1]
+        \State $M\gets 0$
+        \For{$w\in\mathcal{P}_\sigma(t)$, from the outermost scope inward}
+            \If{$c_{t_w}<M$}
+                \State $c_{t_w}\gets M$ \label{ln:reset}
+            \ElsIf{$t_w$ holds orders of the other side}
+                \State $c_{t_w}\gets C$ \label{ln:wrongside}
+            \EndIf
+            \State $t_w.\mathit{sign}\gets\sigma$ \label{ln:setsign}
+            \State $M\gets\max(M,c_{t_w})$
+        \EndFor
+    \end{algorithmic}
+\end{algorithm}
+
+The dynamics of the global clock satisfies a maximum principle.
+\begin{proposition}[Maximum principle] \label{proposition:maximum}
+    For every tick $t$,
+    \begin{equation*}
+        c_t\leq C.
+    \end{equation*}
+\end{proposition}
+\begin{proof}
+    Base: Initially,
+    \begin{equation*}
+        c_t=C=0.
+    \end{equation*}
+    Hypothesis: Before the $k$-th update of $c_t$, for every tick $u$
+    \begin{equation*}
+        c_u\leq C.
+    \end{equation*}
+    Induction: The $k$-th write of $c_t$ is either
+    \begin{enumerate}
+        \item Line \ref{ln:bump} of \Cref{alg:sweep}, where $c_t\gets C$,
+        \item Line \ref{ln:reset} of \Cref{alg:place}, where $c_t\gets\max_{w}c_{t_w}$ and $w\in\mathcal{P}_\sigma(t)$ for some $\sigma$,
+        \item Line \ref{ln:wrongside} of \Cref{alg:place}, where $c_t\gets C$.
+    \end{enumerate}
+    By the hypothesis, for all $w\in\mathcal{P}_\sigma(t)$,
+    \begin{equation*}
+        c_{t_w}\leq C.
+    \end{equation*}
+    Hence, $c_t\leq C$ in all three cases.
+    Since $C$ never decreases, this completes the proof.
+\end{proof}
+The following lemma will be used in the proof of the main result (\Cref{thm:equiv}).
+\begin{lemma} \label{lem:nowrong}
+    Let $t$ be a live tick per \Cref{def:operational}. For any $w\in\mathcal{P}_\sigma(t)$,
+    \begin{equation*}
+        t_w.\mathit{sign}=\sigma.
+    \end{equation*}
+\end{lemma}
+\begin{proof}
+    WLOG, suppose $\sigma=A$.
+    Since the placement that created the short at $t$ ran Line \ref{ln:setsign} in \Cref{alg:place}, 
+    \begin{equation*}
+        t_w.\mathit{sign}=A.
+    \end{equation*}
+    By \Cref{def:operational}, $t_w.sign$ has not changed since then.
+\end{proof}

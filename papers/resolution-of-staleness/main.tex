@@ -1,0 +1,39 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath, amsfonts, amssymb, amsthm, mathtools}
+\usepackage{booktabs, tabularx}
+\usepackage{algorithm}
+\usepackage[noEnd=true, indLines=false]{algpseudocodex}
+\usepackage[style=authoryear]{biblatex}
+\addbibresource{reference.bib}
+
+\usepackage[pdfusetitle]{hyperref}
+\usepackage{xurl}
+\usepackage{cleveref}
+\crefname{algorithm}{Algorithm}{Algorithms}
+
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}
+
+\title{Resolution of staleness in order book with sublinear market order sweep}
+\author{Axiomatch Labs}
+\date{September 4, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+    In this article, we propose a resolution of staleness algorithm for order books supporting sublinear market order sweep. We prove the correctness of the algorithm. Our algorithm needs $N+1$ storage, where $N$ is the number of price ticks. We prove that it is the optimal storage by showing that using $N$ storage is impossible to resolve the staleness.
+\end{abstract}
+
+\input{intro}
+\input{order-book}
+\input{local-clock}
+\input{global-clock}
+\input{resolution-of-staleness}
+
+\printbibliography
+
+\end{document}

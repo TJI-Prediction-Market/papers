@@ -1,0 +1,86 @@
+\section{Laminarity} \label{sec:laminarity}
+In this section, we prove that $\mathcal{S}$ supports a laminar system.
+\begin{definition}[Laminarity]
+    A set system $\mathcal{S}$ is said to be laminar if for any $S_1,S_2\in\mathcal{S}$ either
+    \begin{enumerate}
+        \item $S_1\cap S_2=\emptyset$,
+        \item $S_1\subseteq S_2$,
+        \item $S_2\subseteq S_1$.
+    \end{enumerate}
+    In case $2$ or $3$, we say that $S_1$ and $S_2$ are nested.
+\end{definition}
+\begin{lemma} \label{lem:shortpath}
+    For every non-singleton scope $(a,b]$,
+    \begin{equation*}
+        d(a)=d(b)-1.
+    \end{equation*}
+\end{lemma}
+\begin{proof}
+    Adjoining $(a,b]$ to a minimal partition of $[a]$ partitions $[b]$. Hence
+    \begin{equation*}
+        d(b)\leq d(a)+1.
+    \end{equation*}
+    Suppose for contradiction that
+    \begin{equation*}
+        d(b)<d(a)+1.
+    \end{equation*}
+    Let $t\geq b$. Suppose for contradiction that $(a,b]\in\mathcal{P}$ for a minimal partition $\mathcal{P}$ of $[t]$. Then the scopes in $\mathcal{P}$ preceding $(a,b]$ would partition $[a]$. Hence, $\mathcal{P}_b\coloneqq\{S\in\mathcal{P}\mid S\subseteq[b]\}$ would satisfy
+    \begin{equation*}
+        \lvert\mathcal{P}_b\rvert\geq d(a)+1.
+    \end{equation*}
+    Replacing $\mathcal{P}_b$ by a minimal partition of $[b]$ would partition $[t]$ in
+    \begin{align*}
+        &\lvert\mathcal{P}\rvert-\lvert\mathcal{P}_b\rvert+d(b)\\
+        <&\lvert\mathcal{P}\rvert-\lvert\mathcal{P}_b\rvert+d(a)+1\\
+        \leq&\lvert\mathcal{P}\rvert
+    \end{align*}
+    scopes, contradicting the minimality of $\mathcal{P}$. Hence no minimal partition of $[t]$ with $t\geq b$ would contain $(a,b]$.
+
+    On the other hand, no minimal partition of $[t]$ with $t<b$ contains $(a,b]$. Hence, deleting $(a,b]$ from $\mathcal{S}$ would leave every $d(t)$ unchanged. However, $(a,b]$ straddled $a+1$ and the deletion would lower $\lvert\mathcal{C}_{a+1}\rvert$, contradicting the minimality of $\mathcal{S}$.
+\end{proof}
+We prove the main theorem of this article.
+\begin{theorem}\label{thm:forest}
+    The scopes are laminar.
+\end{theorem}
+\begin{proof}
+    By \Cref{proposition:interval} every scope is an interval. Suppose for contradiction that two scopes $S_1=(a,x]$, $S_2=(b,y]$ were neither disjoint nor nested, i.e., WLOG
+    \begin{equation} \label{eqn:no-singleton}
+        a<b<x<y.
+    \end{equation}
+    By \Cref{eqn:no-singleton}, neither $S_1$ nor $S_2$ were singleton. Hence, by \Cref{lem:shortpath},
+    \begin{equation*}
+        d(a)=d(x)-1
+    \end{equation*}
+    and
+    \begin{equation*}
+        d(b)=d(y)-1.
+    \end{equation*}
+    Case 1: $d(y)\leq d(x)$. Let
+    \begin{equation*}
+        \mathcal{S}'\coloneqq(\mathcal{S}\setminus\{S_1\})\cup\{(b,x]\},
+    \end{equation*}
+    and write $d'$ and $\mathcal{C}'_t$ for $\mathcal{S}'$.
+
+    Let $t\in[N]$ and $\mathcal{P}$ be minimal partition of $[t]$. If $S_1\notin\mathcal{P}$, then $\mathcal{P}\subseteq\mathcal{S}'$. If $S_1\in\mathcal{P}$, then the scopes in $\mathcal{P}$ preceding $S_1$ would partition $[a]$. Hence, $\mathcal{P}_x\coloneqq\{S\in\mathcal{P}\mid S\subseteq[x]\}$ would satisfy
+    \begin{equation*}
+        \lvert\mathcal{P}_x\rvert\geq d(a)+1=d(x).
+    \end{equation*}
+    Replacing $\mathcal{P}_x$ by a minimal partition of $[b]$, which avoids $S_1$ as $S_1\not\subseteq[b]$, followed by $(b,x]$, would partition $[t]$ within $\mathcal{S}'$ in
+    \begin{align*}
+        &\lvert\mathcal{P}\rvert-\lvert\mathcal{P}_x\rvert+d(b)+1\\
+        =&\lvert\mathcal{P}\rvert-\lvert\mathcal{P}_x\rvert+d(y)\\
+        \leq&\lvert\mathcal{P}\rvert-\lvert\mathcal{P}_x\rvert+d(x)\\
+        \leq&\lvert\mathcal{P}\rvert
+    \end{align*}
+    scopes. Either way,
+    \begin{equation*}
+        d'(t)\leq d(t).
+    \end{equation*}
+    Moreover, since $(b,x]\subseteq S_1$, $(b,x]$ would straddle $t$ only if $S_1$ did. Hence, $\lvert\mathcal{C}'_t\rvert\leq\lvert\mathcal{C}_t\rvert$. For $t\in(a,b]$, $S_1$ straddled $t$ but $(b,x]$ did not. Hence,
+    \begin{equation*}
+        \lvert\mathcal{C}'_t\rvert<\lvert\mathcal{C}_t\rvert.
+    \end{equation*}
+    Hence $\mathcal{S}'$ would dominate $\mathcal{S}$, contradicting the minimality of $\mathcal{S}$.
+
+    Case 2 $d(x)<d(y)$ can be proved similarly.
+\end{proof}

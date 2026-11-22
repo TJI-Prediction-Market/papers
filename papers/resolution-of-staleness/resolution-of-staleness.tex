@@ -1,0 +1,67 @@
+\section{Resolution of staleness} \label{sec:staleness}
+In this section, we define staleness using the attributes of a tick and prove its equivalent to \Cref{def:operational}.
+\begin{definition}[Staleness] \label{def:stale}
+    Let $t$ be on side $\sigma$. Then $t$ is said to be stale if either
+    \begin{equation*}
+        t.\mathit{sign}\neq\sigma,
+    \end{equation*}
+    or
+    \begin{equation*}
+        c_t<\alpha_\sigma(t),
+    \end{equation*}
+    where 
+    \begin{equation*}
+        \alpha_\sigma(t)=\max_{w\in\mathcal{P}_\sigma(t),\,w\neq w_t} c_{t_w}.
+    \end{equation*}
+\end{definition}
+\Cref{alg:stale} computes \Cref{def:stale}.
+\begin{algorithm}[htbp!]
+\caption{Staleness predicate for a tick $t$ on side $\sigma$ of the spread}\label{alg:stale}
+    \begin{algorithmic}[1]
+        \Require $t$ lies on side $\sigma$ of the spread
+        \If{$t.\mathit{sign}=\overline\sigma$} \Return true \label{ln:sign}
+        \EndIf
+        \State $M\gets 0$
+        \For{$w\in\mathcal{P}_\sigma(t)$ with $w\neq w_t$}
+            \State $M\gets\max(M,c_{t_w})$
+        \EndFor
+    \State \Return $c_t<M$
+    \end{algorithmic}
+\end{algorithm}
+
+Obviously, \Cref{alg:stale} returns true on input $t$ iff $t$ is stale per \Cref{def:stale}. It remains to show the equivalence between \Cref{def:stale} and \Cref{def:operational}.
+\begin{theorem}[Equivalence] \label{thm:equiv}
+    A tick $t$ is stale per \Cref{def:stale} $\iff$ per \Cref{def:operational}.
+\end{theorem}
+\begin{proof}
+    ($\Leftarrow$) Since $t$ is stale per \Cref{def:operational}, it has been swept but not written. That sweep invoked Line \ref{ln:bump} of \Cref{alg:sweep} for some $w\in\mathcal{P}_\sigma(t)$, i.e.
+    \begin{equation*}
+        c_{t_w}\gets C+1,
+    \end{equation*}
+    where $C$ is the value of the global clock before \texttt{bump} is called during the sweep.
+    
+    Since $w_t$ was not written,
+    \begin{equation*}
+        c_t\leq C<c_{t_w},
+    \end{equation*}
+    where the first inequality is by \Cref{proposition:maximum}. Hence, $t$ is stale per \Cref{def:stale}.
+
+    ($\Rightarrow$) WLOG, suppose that $t$ lies on side $A$. Suppose for contradiction that $t$ were live per \Cref{def:operational}. By \Cref{lem:nowrong},
+    \begin{equation*}
+        t.\mathit{sign}=A,
+    \end{equation*}
+    i.e. $t$ had the correct sign. Since $t$ was stale per \Cref{def:stale},
+    \begin{equation} \label{eqn:contra}
+        c_t<\alpha_A(t).
+    \end{equation}
+    The placement of the live ask order on $t$ would have invoked \Cref{alg:place} and during the last iteration of the for loop
+    \begin{equation*}
+        c_t\gets\alpha_A(t),
+    \end{equation*}
+    Since $c_t$ never decreases, \Cref{eqn:contra} would imply that $\alpha_A(t)$ had increased. The increment could only have come from
+    \begin{itemize}
+        \item Line \ref{ln:bump} of \Cref{alg:sweep} from a sweep crossing $t$,
+        \item Line \ref{ln:wrongside} of \Cref{alg:place} on a wrong-sign tick 
+    \end{itemize}
+    contradicting the original hypothesis and \Cref{lem:nowrong}, respectively.
+\end{proof}

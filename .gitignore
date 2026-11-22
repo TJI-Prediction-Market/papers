@@ -1,0 +1,26 @@
+# LaTeX build artifacts (final PDFs are committed on purpose)
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.nav
+*.out
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+main.pdf
+
+# Editors / OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*~
+*.swp

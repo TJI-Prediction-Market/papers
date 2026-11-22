@@ -1,0 +1,35 @@
+\section{Introduction and model}
+We adopt the cell-probe computational model introduced by \textcite{yao}, where every operation is free except memory access.
+
+An order book consists of a set $[N]=\{1,\dots,N\}$, called ticks, and a monotone map $p:[N]\to\mathbb{R}^+$, called price, and supports logically two operations:
+\begin{enumerate}
+    \item Limit order placement: this means placing buy (resp. sell) price limits to ensure a certain quantity of the underlying cryptocurrency is never bought above (resp. sold below) a certain price.  
+    \item Market order sweep: given an input amount $X$ cash, the algorithm halts at $t\in[N]$ s.t.
+    \begin{equation} \label{eqn:searchable-partial-sum}
+        \min\left\{t\in[N]\mid\sum_{i=1}^tp_i\cdot \text{\#limit orders at }i\geq X\right\},
+    \end{equation}
+    where the order structure on $[N]$ is the pullback order from $\mathbb{R}^+$ by $p$.
+\end{enumerate}
+The words ``sweep'' and ``cross'' will be used interchangeably. Note that \Cref{eqn:searchable-partial-sum} codifies the Searchable Partial Sums (SPS) problem.
+
+We assume the following.
+\begin{axiom} \label{axiom:sub}
+    The market order sweep is $o(N)$.
+\end{axiom}
+and informally for now,
+\begin{axiom} \label{axiom:min}
+    The cost of sweep writes is minimized.
+\end{axiom}
+\Cref{axiom:sub} is not vacuous as SPS has complexity $\Theta(\log N)$ \parencite{patrascu}. The exact definition of the sweep cost in \Cref{axiom:min} is in \Cref{def:cost}.
+
+We show that \Cref{axiom:sub,axiom:min} imply that the order book must support certain tree data structures. While stock exchanges have been using trees like red-black trees to implement order books, we are the first to show the necessity of such data structures: to solve SPS sublinearly on order book, the order book must be a tree.
+
+The organization of the paper is as follows. We introduce scope, the central object of this paper, in \Cref{sec:scope}. We prove that any scope is an interval in \Cref{sec:interval} and that scopes form a laminar structure in \Cref{sec:laminarity} and a forest of plane trees in \Cref{sec:tree}.
+
+\paragraph{Related work}
+Traditional stock exchanges already use trees to implement order books, e.g. red-black tree  \parencite{selph}. Onchain, \textcite{lobster} uses a heap to implement order book. However, both of them use the tree only to find the next available tick with a live order in $O(\log N)$. As such, the worst case market order sweep is $O(N\log N)$, not $o(N)$.
+
+Our main proof uses uncrossing, a classic technique in combinatorial optimization \parencite{lovasz}. \textcite{edmonds} used it to establish laminarity.
+
+\paragraph{Our contribution}
+Prior works use trees to implement order books and prove various algorithmic complexity results. We are the first to study the inverse problem: Given some assumptions on an order book, what can we say about its structure?

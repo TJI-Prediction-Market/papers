@@ -1,0 +1,34 @@
+\section{Order book} \label{sec:book}
+Let $[N]=\{1,\dots,N\}$ be the set of ticks. Long and short orders lie on ticks. It is required that short orders lie to the right of long orders. Long orders form the bid side $B$ and short orders the ask side $A$ of the book. We write $\sigma\in\{B,A\}$ for a side.
+\begin{definition}[Bid and ask ticks] \label{def:bidask}
+    The bid tick $b$ and the ask tick $a$ are defined as follows.
+    \begin{align*}
+        b&\coloneqq\max\{\,t\in[N]\mid t \text{ has a live long order}\,\},\\
+        a&\coloneqq\min\{\,t\in[N]\mid t \text{ has a live short order}\,\},
+    \end{align*}
+    with the convention that $\max\emptyset=-\infty$ and $\min\emptyset=+\infty$.
+\end{definition}
+It follows that $b<a$.
+
+In \textcite{axiomatch2026planetree}, a \textbf{word} is what a sweep writes during an execution. A future limit placement at tick $t$ reads some words to determine if $t$ is stale. The following is the operational definition of \textcite[Definition~1]{axiomatch2026planetree}.
+\begin{definition}[Operational staleness] \label{def:operational}
+    A tick $t$ is stale if a sweep has crossed $t$ but its storage remains bit-identical to before the sweep.
+\end{definition}
+The \textbf{scope} of a word is defined as follows.
+\begin{equation*}
+        S_\sigma(w)\coloneqq\{t\in[N]\mid \text{a placement at } t \text{ on side } \sigma \text{ accesses } w\}.
+\end{equation*}
+Dually, we define the placement set.
+\begin{definition}[Placement set] \label{def:pset}
+    The placement set of a tick $t$ on side $\sigma$ is defined as follows.
+    \begin{equation*}
+        \mathcal{P}_\sigma(t)\coloneqq\{w\mid t\in S_\sigma(w)\}.
+    \end{equation*}
+\end{definition}
+By laminarity \parencite[Theorem~1]{axiomatch2026planetree}, the scopes of the elements of $\mathcal{P}_\sigma(t)$ all contain $t$, and no two scopes cross each other. Hence, the elements of $\mathcal{P}_\sigma(t)$ are linearly ordered by scope inclusion and the $\max$ operator is well-defined on it.
+
+Since every scope is an interval \parencite[Proposition~1]{axiomatch2026planetree}, for each word $w$, we define
+\begin{equation*}
+    t_w\coloneqq\max S_A(w)=\min S_B(w),
+\end{equation*}
+where we use the convention that the ask-side scope is left-open-right-closed whereas the bid-side scope is left-closed-right-open.

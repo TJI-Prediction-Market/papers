@@ -1,0 +1,39 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath, amssymb, amsthm, mathtools}
+\usepackage{xcolor}
+
+\usepackage{hyperref}
+\usepackage[style=authoryear]{biblatex}
+\addbibresource{reference.bib}
+\usepackage{cleveref}
+
+\newtheorem{axiom}{Axiom}
+\Crefname{axiom}{Axiom}{Axioms}
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}
+\newtheorem*{remark}{Remark}
+
+\title{Sublinear market order sweep in order book implies a plane tree structure}
+\author{Axiomatch Labs}
+\date{August 31, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+    An order book supports limit order placement and market order sweep. We show that if the sweep is sublinear and the operation count of a sweep is minimized, the order book will necessarily support a plane tree structure.
+\end{abstract}
+
+\input{intro}
+\input{scopes}
+\input{interval}
+\input{laminarity}
+\input{tree}
+
+\printbibliography
+\input{appendix}
+
+\end{document}

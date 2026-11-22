@@ -1,0 +1,7 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite the relevant paper."
+title: "Axiomatch Labs research papers"
+authors:
+  - name: "Axiomatch Labs"
+license: CC-BY-NC-ND-4.0
+repository-code: "https://github.com/axiomatch-labs/papers"

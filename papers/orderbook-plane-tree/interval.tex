@@ -1,0 +1,25 @@
+\section{Interval} \label{sec:interval}
+By an interval $(a,b]$, we mean $(a,b]\cap[N]$. In this section, we show that a scope is an interval.
+\begin{proposition} \label{proposition:interval}
+    Any scope is an interval.
+\end{proposition}
+\begin{proof}
+    Let $S\in\mathcal{S}$. Suppose for contradiction that $S=A\cup B$ and $A\cap B=\emptyset$. WLOG, let $A$ and $B$ be separated by exactly one interval $I$ with $I\cap S=\emptyset$. Then
+    \begin{equation} \label{eqn:contradiction}
+        \min S<\min I<\max S.
+    \end{equation}
+    Suppose for contradiction that $S\in\mathcal{P}$ for a partition $\mathcal{P}$ of some $[t]$. Since $\max S\leq t$ and $I\cap S=\emptyset$, $\min I$ would lie in some $S'\in\mathcal{P}$ with $S'\neq S$, and $S'$ would lie on one side of $S$, i.e. either $\max S'<\min S$ or $\max S<\min S'$.
+
+    On the other hand, since $\min I\in S'$,
+    \begin{equation*}
+        \min S'\leq\min I\leq\max S'.
+    \end{equation*}
+    The former case would give $\min I<\min S$ and the latter $\max S<\min I$, both contradicting \Cref{eqn:contradiction}. Hence, $S$ would not lie in any partition.
+
+    Deleting $S$ from $\mathcal{S}$ would then leave $d(t)$ unchanged. Let $\mathcal{S}'=\mathcal{S}\setminus\{S\}$ and $t\in[\min S,\max S)$. Then
+    \begin{equation*}
+        \lvert\mathcal{C}'_t\rvert=\lvert\{S'\in\mathcal{S}'\mid S' \text{ straddles }t\}\rvert<\lvert\mathcal{C}_t\rvert,
+    \end{equation*}
+    contradicting the minimality of $\mathcal{S}$.
+\end{proof}
+WLOG, we assume that all scopes are left-open-right-closed intervals.

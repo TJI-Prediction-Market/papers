@@ -1,0 +1,41 @@
+\section{Local clocks} \label{sec:local}
+In this section, we prove that each tick must maintain a storage, called the local clock. Then, we prove that $N$ local clocks cannot resolve staleness.
+
+During the sweep, we cannot hand out trading proceeds to users who placed limit orders on ticks. Otherwise, $o(N)$ sweep would be violated. Therefore, users must come to collect their proceeds at a later time after the sweep. This leads to the following.
+\begin{proposition}[Local clocks] \label{proposition:local}
+    Every tick contains a local clock $c$.
+\end{proposition}
+\begin{proof}
+    Consider the following trading sequence.
+    \begin{enumerate}
+        \item User $1$ places an order at $t$.
+        \item A sweep crosses only tick $t$.
+        \item User $2$ places at $t$ the same order as user $1$.
+    \end{enumerate}
+    Suppose for contradiction that a tick $t$ did not maintain any local clock. Then after the above trading sequence, the book would be bit-identical to the book before the sweep had taken place. Then both users $1$ and $2$ would be allowed to collect the trading proceeds, contradicting the correctness of order book.
+\end{proof}
+Suppose that each local clock can maintain at most $M$ different states.
+\begin{theorem} \label{thm:insufficient}
+    $N$ local clocks cannot resolve staleness.
+\end{theorem}
+\begin{proof}
+    WLOG, suppose tree has height $2$. Let $t\in S(w)$ for some word $w$. Consider the following trading sequences. For $M$ empty books, at book $m\in[M]$
+    \begin{enumerate}
+        \item Place limit order at $t$ and $t_w$.
+        \item Sweep halts at $t$, place limit order at $t$. Repeat for $m$ times.
+        \item Sweep halts at $t_w$.
+    \end{enumerate}
+    Since $t_w$ has been crossed and $t\in S(w)$, $t$ is stale.
+    
+    Suppose for contradiction that the $N$ local clocks resolved staleness. It would follow that
+    \begin{equation*}
+        \texttt{isStale}(t,c_t,c_{t_w})=\texttt{true}.
+    \end{equation*}
+    Across $M$ books, $c_{t_w}$ was the same value because computing it only happened at step $3$. On the other hand, $c_t$ had had taken all values in $[M]$. Suppose for contradiction that
+    \begin{equation*}
+        c_t^i=c_t^j
+    \end{equation*}
+    for some $1\leq i<j\leq M$. In $j$-th book, right after the $j$-th order was placed, the book would be bit-identical to what it was when the $i$-th order was placed. Hence, user would not be able to claim the proceeds from the already filled $i$-th order, contradicting the correctness of order book.
+
+    It would follow that \texttt{isStale} did not depend on $c_t$ and were a constant function of $t$ for fixed $c_{t_w}$, contradicting that $t$ can be live.
+\end{proof}
