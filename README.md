@@ -33,16 +33,14 @@ latexmk -pdf -jobname=resolution-of-staleness main.tex
   author = {{Axiomatch Labs}},
   title  = {Sublinear market order sweep in order book implies a plane tree structure},
   year   = {2026},
-  month  = aug,
-  url    = {https://github.com/axiomatch-labs/papers}
+  month  = aug
 }
 
 @misc{axiomatch2026staleness,
   author = {{Axiomatch Labs}},
   title  = {Resolution of staleness in order book with sublinear market order sweep},
   year   = {2026},
-  month  = sep,
-  url    = {https://github.com/axiomatch-labs/papers}
+  month  = sep
 }
 ```
 
